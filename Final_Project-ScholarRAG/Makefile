@@ -69,6 +69,7 @@ reindex:
 
 eval:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/eval_retrieval.py \
+		--eval-set Evaluation/queries/queries_120.json \
 		--k 10 \
 		--output Evaluation/data/retrieval_run_$(shell date +%Y%m%d).json
 
