@@ -6,9 +6,13 @@
 [![pgvector](https://img.shields.io/badge/pgvector-0.7-336791.svg)](https://github.com/pgvector/pgvector)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED.svg?logo=docker)](https://www.docker.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/sushildalavi/Final-Project-ScholarRAG/actions/workflows/ci.yml/badge.svg)](https://github.com/sushildalavi/Final-Project-ScholarRAG/actions/workflows/ci.yml)
 
-**ScholarRAG** is a production-architecture Retrieval-Augmented Generation (RAG) system for scientific literature discovery, multi-document question answering, and calibrated answer confidence scoring.
+> Final project for **USC CSCI 444 — Natural Language Processing**.
+> Authors: Sushil Dalavi, Parvathi Sanjana Pericherla, Eshna Gupta.
+> Lives at
+> [`sushildalavi/CSCI-444 → Final_Project-ScholarRAG`](https://github.com/sushildalavi/CSCI-444/tree/main/Final_Project-ScholarRAG).
+
+**ScholarRAG** is a Retrieval-Augmented Generation (RAG) system for scientific literature discovery, multi-document question answering, and calibrated answer confidence scoring.
 
 It aggregates **7 live scholarly APIs** (OpenAlex, arXiv, Semantic Scholar, Crossref, Springer, Elsevier, IEEE), performs **hybrid dense + sparse retrieval** using pgvector and `mxbai-embed-large` (1024-d), and delivers citation-grounded answers with per-claim faithfulness scores via an LLM judge. Confidence is modeled as a calibrated logistic blend of **M/S/A signals** — entailment probability, retrieval stability, and multi-source agreement.
 
@@ -16,6 +20,7 @@ It aggregates **7 live scholarly APIs** (OpenAlex, arXiv, Semantic Scholar, Cros
 
 ## Table of Contents
 
+- [Final Report and Class Presentation](#final-report-and-class-presentation)
 - [Architecture](#architecture)
 - [Key Features](#key-features)
 - [Benchmark Results](#benchmark-results)
@@ -26,6 +31,14 @@ It aggregates **7 live scholarly APIs** (OpenAlex, arXiv, Semantic Scholar, Cros
 - [Evaluation](#evaluation)
 - [Re-indexing after Model Change](#re-indexing-after-model-change)
 - [Local Runtime](#local-runtime)
+
+---
+
+## Final Report and Class Presentation
+
+- **Final Report (LaTeX, ACL style):** [`report/final_report.tex`](report/final_report.tex) — full write-up of the system, the M/S/A confidence model, the 530-pair calibration set, and the H1/H2/H3 evaluation. Companion figures live in [`report/figures/`](report/figures/).
+- **Class Presentation:** [`ScholarRAG_Class_Presentation.pptx`](ScholarRAG_Class_Presentation.pptx) — slide deck used for the in-class presentation.
+- **Calibration dataset:** [`Evaluation/data/calibration/`](Evaluation/data/calibration/) — 530 human-labeled claim–evidence pairs, three coder workbooks, IAA report, fitted weights, and reliability diagram.
 
 ---
 
@@ -206,10 +219,10 @@ Evaluated on 20 diverse ML/NLP queries with live API calls.
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/sushildalavi/Final-Project-ScholarRAG.git
-cd Final-Project-ScholarRAG
-cp .env.example .env
-# fill in OPENAI_API_KEY, DATABASE_URL, OLLAMA_BASE_URL
+git clone https://github.com/sushildalavi/CSCI-444.git
+cd CSCI-444/Final_Project-ScholarRAG
+cp frontend/.env.example frontend/.env
+# fill in OPENAI_API_KEY, DATABASE_URL, OLLAMA_BASE_URL in your shell or .env
 ```
 
 ### 2. Start Postgres and Ollama
@@ -308,6 +321,10 @@ ScholarRAG/
 │   │   └── claim_evidence_pairs.json # Extracted claim-evidence pairs
 │   └── data/
 │       └── calibration/             # IAA report, gold labels, fit, reliability diagram
+├── report/
+│   ├── final_report.tex             # ACL-style final report
+│   └── figures/                     # Compiled figures used in the report
+├── ScholarRAG_Class_Presentation.pptx  # In-class slide deck
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
@@ -331,7 +348,7 @@ pgvector provides ANN search as a first-class PostgreSQL extension, enabling:
 
 ### Why hybrid scoring?
 
-Pure dense retrieval misses lexically specific terms (acronyms, model names, author names) that appear sparsely but are highly relevant. Pure sparse retrieval misses semantic synonymy. The hybrid score `(1-α) × cosine_sim + α × sparse_overlap` with tunable `α` (default 0.25) captures both. Most research queries are semantic, so dense retrieval dominates; sparse overlap is a correction signal for named-entity-heavy queries.
+Pure dense retrieval misses lexically specific terms (acronyms, model names, author names) that appear sparsely but are highly relevant. Pure sparse retrieval misses semantic synonymy. The hybrid score `(1-α) × cosine_sim + α × sparse_overlap` with tunable `α` (default 0.35) captures both. Most research queries are semantic, so dense retrieval dominates; sparse overlap is a correction signal for named-entity-heavy queries.
 
 ### Why M/S/A confidence vs. a single similarity score?
 
