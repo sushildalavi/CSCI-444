@@ -353,8 +353,17 @@ export type EvalRunResponse = {
   details: Array<{
     query: string;
     gold_doc_id?: number;
-    retrieval_only_top: any[];
-    rerank_top: any[];
+    retrieval_only_top: EvalRankedHit[];
+    rerank_top: EvalRankedHit[];
     latency_ms: { retrieve_ms: number; rerank_ms: number };
   }>;
+};
+
+export type EvalRankedHit = {
+  rank: number;
+  doc_id?: number;
+  chunk_id?: number;
+  title?: string;
+  score?: number;
+  page?: number;
 };

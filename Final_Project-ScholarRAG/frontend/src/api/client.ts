@@ -30,8 +30,8 @@ async function jsonRequest<T>(path: string, opts: RequestInit = {}): Promise<T> 
       throw new Error((await res.text()) || res.statusText);
     }
     return res.json() as Promise<T>;
-  } catch (e: any) {
-    const msg = e?.message || 'Network error';
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Network error';
     if (/Failed to fetch/i.test(msg)) {
       throw new Error(`Backend unreachable at ${API_BASE}`);
     }
