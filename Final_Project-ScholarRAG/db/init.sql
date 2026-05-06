@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS papers (
     year       INT,
     source     TEXT,
     source_url TEXT,
-    -- Using 1536-dim to match OpenAI text-embedding-3-small (fast/accurate balance)
+    -- 1536-d storage; mxbai-embed-large vectors (1024) are zero-padded so the
+    -- column also fits OpenAI text-embedding-3-small if we swap providers.
     embedding  vector(1536),
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now()
