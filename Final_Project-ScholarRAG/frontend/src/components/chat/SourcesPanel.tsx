@@ -431,6 +431,15 @@ export function SourcesPanel({
                 'citation coverage, and evidence margin.\n' +
                 'Per-source score — how well retrieval found and placed this source for the query.'
               );
+              // Show the M/S/A breakdown for the strongest cited chunk in this group.
+              const sortByScore = (a: ChunkDetail, b: ChunkDetail) =>
+                (b.msaScore ?? 0) - (a.msaScore ?? 0);
+              const msaChunk =
+                g.chunks.filter((c) => c.cited && c.msaScore != null).sort(sortByScore)[0]
+                ?? g.chunks.filter((c) => c.msaScore != null).sort(sortByScore)[0];
+              const fmt = (v?: number) => (v == null ? '–' : v.toFixed(2));
+              const msaTitle =
+                'M = NLI entailment · S = stability over paraphrased queries · A = lexical overlap across sources';
               const pageLabel =
                 g.pages.length === 0
                   ? null
@@ -469,6 +478,14 @@ export function SourcesPanel({
                       <Badge tone={confTone} title={confTitle}>
                         Confidence {confLabel ?? ''} {confPct}%
                       </Badge>
+                    )}
+                    {msaChunk && (
+                      <span
+                        className="rounded-md border border-zinc-200 bg-white px-1.5 py-0.5 font-mono text-[10px] text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400"
+                        title={msaTitle}
+                      >
+                        M {fmt(msaChunk.msaM)} · S {fmt(msaChunk.msaS)} · A {fmt(msaChunk.msaA)}
+                      </span>
                     )}
                     {g.metadataOnly && (
                       <Badge
