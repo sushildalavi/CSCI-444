@@ -11,7 +11,6 @@ notebooks plus the final project, **ScholarRAG**.
 - `Final_Project-ScholarRAG/` – ScholarRAG: a trust-first literature
   assistant with sentence-level grounding and a calibrated
   per-citation confidence score (M/S/A). See the project's own
-  [README](Final_Project-ScholarRAG/README.md) and the
-  [final report](Final_Project-ScholarRAG/report/final_report.tex).
-  Calibration data (530 labeled claim–evidence pairs) lives in
+  [README](Final_Project-ScholarRAG/README.md). Calibration data
+  (530 labeled claim–evidence pairs) lives in
   `Final_Project-ScholarRAG/Evaluation/data/calibration/`.

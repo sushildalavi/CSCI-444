@@ -41,7 +41,7 @@ Evaluated on a corpus of 15 landmark ML/NLP papers (1997–2023) and 120 GPT-4o-
 
 ## Table of Contents
 
-- [Final Report, Slides, and Dataset](#final-report-slides-and-dataset)
+- [Slides and Dataset](#slides-and-dataset)
 - [Architecture](#architecture)
 - [Key Features](#key-features)
 - [Benchmark Results](#benchmark-results)
@@ -56,9 +56,8 @@ Evaluated on a corpus of 15 landmark ML/NLP papers (1997–2023) and 120 GPT-4o-
 
 ---
 
-## Final Report, Slides, and Dataset
+## Slides and Dataset
 
-- **Final Report** (LaTeX, ACL style) — [`report/final_report.tex`](report/final_report.tex) and figures in [`report/figures/`](report/figures/).
 - **Class Presentation** — [`ScholarRAG_Class_Presentation.pptx`](ScholarRAG_Class_Presentation.pptx).
 - **Calibration Dataset** — [`Evaluation/data/calibration/`](Evaluation/data/calibration/) contains the 530 majority-voted claim–evidence pairs, the three coder workbooks (`coder_A.xlsx`, `coder_B.xlsx`, `coder_C.xlsx`), the inter-annotator-agreement report (`iaa_report.json`), the fitted logistic weights (`calibration_fit.json`), and the reliability-diagram data (`reliability_diagram.xlsx`).
 - **Retrieval Eval** — [`Evaluation/queries/queries_120.json`](Evaluation/queries/queries_120.json) (120 queries with `target_doc_id`) and [`Evaluation/data/retrieval_eval_120.json`](Evaluation/data/retrieval_eval_120.json) (Recall/MRR/nDCG report).
@@ -248,7 +247,7 @@ Set the following in your shell (or in a `.env` file the backend reads):
 
 ```bash
 export OPENAI_API_KEY=sk-...
-export DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/scholarrag
+export DATABASE_URL=postgresql://scholarrag:scholarrag@127.0.0.1:5432/scholarrag_db
 export OLLAMA_BASE_URL=http://127.0.0.1:11434
 ```
 
@@ -334,9 +333,6 @@ Final_Project-ScholarRAG/
 │   ├── queries/                     # 120 evaluation queries + claim/evidence pairs
 │   └── data/calibration/            # 530 labeled pairs, gold, IAA, fit, reliability
 ├── images/                          # Architecture and pipeline diagrams (used in README)
-├── report/
-│   ├── final_report.tex             # ACL-style final report
-│   └── figures/                     # Compiled figures used in the report
 ├── ScholarRAG_Class_Presentation.pptx  # In-class slide deck
 ├── docker-compose.yml
 ├── Dockerfile
@@ -415,6 +411,13 @@ The embedding contract (`provider`, `model`, `version`, `dim`) stored on every c
 | `VECTOR_STORE_DIM` | pgvector column dimension (1536 for backward compat) |
 | `OPENAI_EMBEDDING_MODEL` | OpenAI embedding model when `EMBEDDING_PROVIDER=openai` |
 | `OPENAI_EMBED_DIMENSIONS` | Requested embedding dimensions for OpenAI embeddings |
+| `EMBEDDING_QUERY_PREFIX` | Optional prefix prepended to query strings before embedding |
+| `EMBEDDING_DOC_PREFIX` | Optional prefix prepended to document chunks before embedding |
+| `EMBEDDING_BATCH_SIZE` | Batch size for the embedding client (default `16`) |
+| `EMBEDDING_TIMEOUT_SECONDS` | HTTP timeout for embedding requests (default `30`) |
+| `EMBEDDING_RETRY_ATTEMPTS` | Max retries on embedding failure (default `3`) |
+| `EMBEDDING_RETRY_DELAY` | Backoff delay between retries in seconds (default `1.5`) |
+| `STORAGE_DIR` | On-disk directory for uploaded PDFs (default `./storage`) |
 | `DATABASE_URL` | Postgres connection string |
 | `CORS_ORIGINS` | Comma-separated allowed origins |
 | `CONFIDENCE_USE_FITTED_WEIGHTS` | `true` to load fitted weights from `confidence_calibration` |
