@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+dist/
+build/
+.vite/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Project artifacts
+Final_Project-ScholarRAG/storage/
+Final_Project-ScholarRAG/logs/
+Final_Project-ScholarRAG/Evaluation/papers/*.pdf
+Final_Project-ScholarRAG/.pytest_cache/
+Final_Project-ScholarRAG/frontend/node_modules/
+Final_Project-ScholarRAG/frontend/dist/
+Final_Project-ScholarRAG/backend/__pycache__/
+Final_Project-ScholarRAG/**/__pycache__/
+
+# Editor
+.idea/
+.vscode/
+*.swp
