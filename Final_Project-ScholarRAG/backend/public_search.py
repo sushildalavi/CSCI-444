@@ -385,9 +385,11 @@ def public_live_search(
     source_only: str | None = None,
     return_metadata: bool = False,
     intent: dict | None = None,
-):
+) -> list[dict] | dict:
     """
     Fetch fresh candidates from external sources and rerank with embeddings + sparse overlap.
+    Returns a list of ranked dicts by default, or a `{results, metadata}` dict when
+    `return_metadata=True`.
 
     When `intent` is supplied (from backend.intent_resolver.resolve_query_intent)
     and not in fallback, `intent["search_queries"]` drives provider fan-out and

@@ -66,7 +66,7 @@ def _hash_bytes(data: bytes) -> str:
 
 
 def _extract_pdf_text(data: bytes) -> List[Tuple[int, str]]:
-    """Lightweight text extractor for PDFs; OCR is a TODO."""
+    """Lightweight text extractor for born-digital PDFs (no OCR fallback)."""
     reader = PdfReader(io.BytesIO(data))
     pages: List[Tuple[int, str]] = []
     for i, page in enumerate(reader.pages, start=1):

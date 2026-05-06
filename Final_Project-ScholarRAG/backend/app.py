@@ -315,7 +315,7 @@ def assistant_answer(
             }
         },
     )
-):
+) -> dict:
     """
     Unified QA endpoint for uploaded docs (chunk RAG) or public papers (FAISS/external).
     Returns answer plus lightweight citations.
@@ -1791,7 +1791,7 @@ def assistant_answer(
 
 
 @app.post("/assistant/resolve_sense")
-def assistant_resolve_sense(payload: dict = Body(...)):
+def assistant_resolve_sense(payload: dict = Body(...)) -> dict:
     query = (payload.get("query") or "").strip()
     scope = payload.get("scope") or "uploaded"
     k = int(payload.get("k") or 8)
@@ -2380,7 +2380,7 @@ def latest_papers(limit: int = 10):
     return latest_research_feed(limit=limit)
 
 @app.get("/search")
-def search_papers(query: str = Query(..., description="Search query text"), k: int = 5):
+def search_papers(query: str = Query(..., description="Search query text"), k: int = 5) -> dict:
     """Return top-k live public scholarly results for a given query."""
     public_resp = public_live_search(query, k=max(1, k), return_metadata=True)
     results = []
@@ -2438,7 +2438,7 @@ def summarize(query: str = Query(..., description="Topic to summarize")):
     return {"query": query, "summary": summary, "provider_status": public_resp.get("provider_status", {})}
 
 @app.post("/ask")
-def ask(payload: dict = Body(...)):
+def ask(payload: dict = Body(...)) -> dict:
     if client is None:
         raise HTTPException(status_code=503, detail="OpenAI client not configured.")
 
